@@ -679,7 +679,75 @@ a {
   letter-spacing: 2px;
 }
 
+
+/* 배경 반짝이 효과 */
+.sparkle-field {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sparkle {
+  position: absolute;
+  top: -16px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: rgba(255, 236, 199, .95);
+  box-shadow: 0 0 12px rgba(255, 224, 169, .85);
+  opacity: 0;
+  animation: sparkleFall var(--duration) linear forwards;
+}
+
+.sparkle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--size) * 3.2);
+  height: 1px;
+  background: rgba(255, 236, 199, .75);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.wrap {
+  position: relative;
+  z-index: 2;
+}
+
+/* 10. 공유하기 */
+.share-section {
+  background: #100d0a;
+}
+
+.share-card {
+  display: grid;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 22px;
+  border: 1px solid rgba(195,167,128,.2);
+  border-radius: 26px;
+  background: rgba(255,255,255,.035);
+}
+
+.kakao-share-btn {
+  background: #f7d957;
+  color: #281c05;
+}
+
+.link-copy-btn {
+  color: #d9c3a4;
+}
+
 /* 애니메이션 */
+@keyframes sparkleFall {
+  0% { opacity: 0; transform: translate3d(0, -20px, 0) rotate(0deg); }
+  12% { opacity: .85; }
+  100% { opacity: 0; transform: translate3d(var(--drift), 105vh, 0) rotate(240deg); }
+}
+
 @keyframes heroMovie {
   0% { opacity: 0; transform: scale(1.15); }
   100% { opacity: 1; transform: scale(1); }

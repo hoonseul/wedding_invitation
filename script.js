@@ -11,6 +11,11 @@ const MAP_SEARCH = "웨딩시그니처";
 const VENUE_LAT = 37.549626; // 네이버 지도 API 좌표: 필요하면 수정
 const VENUE_LNG = 126.918139; // 네이버 지도 API 좌표: 필요하면 수정
 
+// 카카오톡 공유 JavaScript 키
+// 카카오 개발자센터에서 발급받은 JavaScript 키를 아래 따옴표 안에 넣으면 카카오톡 공유가 활성화됩니다.
+// 키를 비워두면 자동으로 링크 복사 기능으로 대체됩니다.
+const KAKAO_JS_KEY = "";
+
 /* =====================================================
   02. D-DAY 계산
 ===================================================== */
@@ -202,3 +207,88 @@ window.addEventListener("keydown", (event) => {
     closeGallery();
   }
 });
+
+
+/* =====================================================
+  10. 카카오톡 공유 / 링크 복사
+===================================================== */
+const kakaoShareBtn = document.getElementById("kakaoShareBtn");
+const linkCopyBtn = document.getElementById("linkCopyBtn");
+
+function copyCurrentLink() {
+  const currentUrl = window.location.href;
+
+  navigator.clipboard.writeText(currentUrl).then(() => {
+    alert("청첩장 링크가 복사되었습니다.");
+  });
+}
+
+if (linkCopyBtn) {
+  linkCopyBtn.addEventListener("click", copyCurrentLink);
+}
+
+if (kakaoShareBtn) {
+  kakaoShareBtn.addEventListener("click", () => {
+    const shareUrl = window.location.href;
+
+    if (window.Kakao && KAKAO_JS_KEY) {
+      if (!Kakao.isInitialized()) {
+        Kakao.init(KAKAO_JS_KEY);
+      }
+
+      Kakao.Share.sendDefault({
+        objectType: "feed",
+        content: {
+          title: "종훈 & 예슬의 결혼식에 초대합니다",
+          description: "2027년 8월 21일 토요일 오후 4시 20분 · 웨딩시그니처",
+          imageUrl: new URL("images/hero.jpg", window.location.href).href,
+          link: {
+            mobileWebUrl: shareUrl,
+            webUrl: shareUrl
+          }
+        },
+        buttons: [
+          {
+            title: "청첩장 보기",
+            link: {
+              mobileWebUrl: shareUrl,
+              webUrl: shareUrl
+            }
+          }
+        ]
+      });
+    } else {
+      copyCurrentLink();
+    }
+  });
+}
+
+/* =====================================================
+  11. 배경 반짝이 내리는 효과
+===================================================== */
+const sparkleField = document.getElementById("sparkleField");
+
+function createSparkle() {
+  if (!sparkleField) return;
+
+  const sparkle = document.createElement("span");
+  sparkle.className = "sparkle";
+
+  const size = Math.random() * 3 + 2;
+  const left = Math.random() * 100;
+  const duration = Math.random() * 4 + 5;
+  const drift = (Math.random() * 80 - 40).toFixed(1);
+
+  sparkle.style.left = `${left}%`;
+  sparkle.style.setProperty("--size", `${size}px`);
+  sparkle.style.setProperty("--duration", `${duration}s`);
+  sparkle.style.setProperty("--drift", `${drift}px`);
+
+  sparkleField.appendChild(sparkle);
+
+  setTimeout(() => {
+    sparkle.remove();
+  }, duration * 1000);
+}
+
+setInterval(createSparkle, 420);

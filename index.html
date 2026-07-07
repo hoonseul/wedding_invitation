@@ -16,9 +16,15 @@
     3) 키를 넣기 전에는 이미지 미리보기 지도(images/naver-map.jpg)가 보임
   -->
   <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=여기에_네이버_CLIENT_ID"></script>
+
+  <!-- 카카오톡 공유 SDK: script.js에서 KAKAO_JS_KEY를 넣으면 카카오톡 공유가 활성화됩니다 -->
+  <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 </head>
 
 <body>
+  <!-- 배경 반짝이 효과 영역: script.js에서 자동으로 생성됩니다 -->
+  <div class="sparkle-field" id="sparkleField" aria-hidden="true"></div>
+
   <main class="wrap">
 
     <!-- =====================================================
@@ -258,8 +264,25 @@
       <a class="btn rsvp-btn" href="https://forms.google.com" target="_blank">참석 여부 전달하기</a>
     </section>
 
+
+
     <!-- =====================================================
-      10. 계좌 안내
+      10. 공유하기
+      카카오톡 공유 / 링크 복사
+    ====================================================== -->
+    <section class="share-section fade">
+      <p class="label">SHARE</p>
+      <h2 class="title">Share Our Day</h2>
+      <p class="text">소중한 분들께 청첩장 링크를 공유해 주세요.</p>
+
+      <div class="share-card">
+        <button class="btn kakao-share-btn" id="kakaoShareBtn" type="button">카카오톡으로 공유하기</button>
+        <button class="btn outline link-copy-btn" id="linkCopyBtn" type="button">링크 복사하기</button>
+      </div>
+    </section>
+
+    <!-- =====================================================
+      11. 계좌 안내
     ====================================================== -->
     <section class="account-section fade">
       <p class="label">ACCOUNT</p>
@@ -281,7 +304,7 @@
     </section>
 
     <!-- =====================================================
-      11. 엔딩
+      12. 엔딩
       수정 이미지: images/ending.jpg
     ====================================================== -->
     <section class="ending fade">
