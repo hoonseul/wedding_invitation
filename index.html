@@ -3,317 +3,186 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#070605" />
+  <meta name="format-detection" content="telephone=no" />
   <title>Jonghoon & Yeseul Wedding</title>
-
-  <!-- 디자인 파일 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Noto+Serif+KR:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link rel="stylesheet" href="style.css" />
-
-  <!--
-    네이버 지도 API
-    1) 네이버 클라우드에서 Maps API 키 발급
-    2) 아래 '여기에_네이버_CLIENT_ID' 부분만 교체
-    3) 키를 넣기 전에는 이미지 미리보기 지도(images/naver-map.jpg)가 보임
-  -->
-  <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=여기에_네이버_CLIENT_ID"></script>
-
-  <!-- 카카오톡 공유 SDK: script.js에서 KAKAO_JS_KEY를 넣으면 카카오톡 공유가 활성화됩니다 -->
-  <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+  <script src="config.js"></script>
 </head>
-
 <body>
+  <audio id="bgm" loop><source src="music/bgm.mp3" type="audio/mpeg" /></audio>
+  <button class="bgm-button" id="bgmButton" type="button" aria-label="배경음악 켜기">♪</button>
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <nav class="mini-nav" id="miniNav" aria-label="청첩장 메뉴">
+    <a href="#invitation">초대글</a>
+    <a href="#calendar">일정</a>
+    <a href="#story">이야기</a>
+    <a href="#gallery">갤러리</a>
+    <a href="#venue">오시는길</a>
+    <a href="#account">전하실곳</a>
+  </nav>
 
-  <main class="wrap">
-
-    <!-- =====================================================
-      01. 영화 오프닝
-      수정 이미지: images/hero.jpg
-    ====================================================== -->
-    <section class="hero">
-      <button class="sound-btn" id="soundBtn" type="button">BGM OFF</button>
-
+  <main class="site-wrap">
+    <section class="hero" id="top">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
       <div class="hero-content">
-        <p class="hero-kicker">A WEDDING FILM</p>
-        <h1>Jonghoon<br />& Yeseul</h1>
-        <p class="hero-date">2027.08.21 SAT · 4:20 PM</p>
-        <p class="scroll-text">SCROLL TO BEGIN</p>
+        <p class="eyebrow light">A WEDDING EDITORIAL</p>
+        <h1 class="hero-title"><span>THE</span><span>WEDDING</span><span>DAY</span></h1>
+        <p class="hero-names"><span id="heroGroom">Jonghoon</span><i>and</i><span id="heroBride">Yeseul</span></p>
       </div>
+      <div class="scroll-cue">Scroll</div>
     </section>
 
-    <!-- BGM 파일: music/bgm.mp3 교체 -->
-    <audio id="bgm" src="music/bgm.mp3" loop></audio>
-
-    <!-- =====================================================
-      02. 브랜드 인트로
-    ====================================================== -->
-    <section class="brand-intro fade">
-      <div class="brand-line"></div>
-      <p class="label">OUR WEDDING STORY</p>
-      <p class="brand-copy">
-        One scene,<br />
-        two hearts,<br />
-        and the beginning<br />
-        of our forever.
+    <section class="section invitation reveal" id="invitation">
+      <div class="ornament">❦</div>
+      <p class="section-number">No. 01</p>
+      <h2 class="script-title">Invitation</h2>
+      <div class="thin-line"></div>
+      <p class="ko-copy">
+        서로의 가장 깊은 계절이 되어준 두 사람이<br />
+        이제 하나의 길을 함께 걸어가려 합니다.<br /><br />
+        소중한 날, 귀한 걸음으로 함께해 주시면<br />
+        오래도록 따뜻하게 간직하겠습니다.
       </p>
-      <p class="text">
-        하나의 장면처럼 기억될 날,<br />
-        저희의 새로운 시작에 초대합니다.
-      </p>
+      <p class="couple-ko"><span id="groomKo">김종훈</span><em>그리고</em><span id="brideKo">박예슬</span></p>
     </section>
 
-    <!-- =====================================================
-      03. 초대글
-    ====================================================== -->
-    <section class="invitation fade">
-      <div class="invitation-card">
-        <p class="label">INVITATION</p>
-        <h2 class="title">We invite you</h2>
-        <p class="text">
-          서로의 가장 깊은 계절이 되어준 두 사람이<br />
-          이제 하나의 길을 함께 걸어가려 합니다.<br /><br />
-          소중한 날, 귀한 걸음으로 함께해 주시면<br />
-          오래도록 따뜻하게 간직하겠습니다.
-        </p>
-        <div class="names"><strong>김종훈</strong> 그리고 <strong>박예슬</strong></div>
+    <section class="section calendar-section point-section reveal" id="calendar">
+      <p class="section-number">No. 02</p>
+      <h2 class="serif-title" id="calendarMonthTitle">August</h2>
+      <div class="calendar-card">
+        <div class="calendar-head"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+        <div class="calendar-grid" id="calendarGrid"></div>
       </div>
-    </section>
-
-    <!-- =====================================================
-      04. 예식 날짜
-    ====================================================== -->
-    <section class="date-section fade">
-      <p class="label">SAVE THE DATE</p>
-      <h2 class="title">Wedding Day</h2>
-      <div class="date-card">
-        <div class="big-date">08.21</div>
-        <p class="date-info">2027년 8월 21일 토요일<br />오후 4시 20분</p>
-        <p class="dday" id="dday"></p>
-        <button class="btn calendar-btn" id="calendarBtn" type="button">캘린더에 저장</button>
+      <div class="date-display">
+        <strong id="dateDisplayKo">2027.08.21 토요일</strong>
+        <span id="timeDisplayKo">오후 4시 20분</span>
       </div>
+      <p class="dday" id="dday"></p>
     </section>
 
-    <!-- =====================================================
-      05. 우리의 타임라인
-      사진 교체: images/timeline01.jpg ~ images/timeline04.jpg
-    ====================================================== -->
-    <section class="timeline-section fade">
-      <p class="label">OUR TIMELINE</p>
-      <h2 class="title">우리가 걸어온 그 길</h2>
-
-      <div class="timeline">
-        <div class="timeline-item slide-left">
-          <div class="timeline-left">
-            <div class="timeline-img"><img src="images/timeline01.jpg" alt="첫 만남" /></div>
-          </div>
-          <div class="timeline-center"><span class="dot"></span></div>
-          <div class="timeline-right">
-            <div class="timeline-copy">
-              <span>우리의 시작</span>
-              <h3>운명 같은 첫 만남</h3>
-              <p>작은 우연이<br />가장 소중한 인연이 된 날</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="timeline-item slide-right">
-          <div class="timeline-left">
-            <div class="timeline-copy right-align">
-              <span>함께한 시간</span>
-              <h3>당연해진 우리</h3>
-              <p>서로의 하루가 되어<br />자연스럽게 쌓여간 마음</p>
-            </div>
-          </div>
-          <div class="timeline-center"><span class="dot"></span></div>
-          <div class="timeline-right">
-            <div class="timeline-img"><img src="images/timeline02.jpg" alt="함께한 시간" /></div>
-          </div>
-        </div>
-
-        <div class="timeline-item slide-left">
-          <div class="timeline-left">
-            <div class="timeline-img"><img src="images/timeline03.jpg" alt="프로포즈" /></div>
-          </div>
-          <div class="timeline-center"><span class="dot"></span></div>
-          <div class="timeline-right">
-            <div class="timeline-copy">
-              <span>대답은 YES</span>
-              <h3>평생을 약속한 날</h3>
-              <p>같은 마음으로<br />같은 미래를 바라본 순간</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="timeline-item slide-right">
-          <div class="timeline-left">
-            <div class="timeline-copy right-align">
-              <span>2027.08.21</span>
-              <h3>Wedding Day</h3>
-              <p>너와 나, 우리<br />새로운 장면이 시작되는 날</p>
-            </div>
-          </div>
-          <div class="timeline-center"><span class="dot"></span></div>
-          <div class="timeline-right">
-            <div class="timeline-img"><img src="images/timeline04.jpg" alt="웨딩데이" /></div>
-          </div>
-        </div>
-      </div>
+    <section class="section story-section reveal" id="story">
+      <div class="vintage-label">OUR STORY</div>
+      <h2 class="serif-title">The Story of Us</h2>
+      <div class="story-list" id="timelineList"></div>
     </section>
 
-    <!-- =====================================================
-      06. 필름 갤러리
-      사진 교체: images/gallery01.jpg ~ images/gallery06.jpg
-      사진 클릭 시 전체 화면으로 확대됨
-    ====================================================== -->
-    <section class="film-gallery fade">
-      <p class="label">PHOTO GALLERY</p>
-      <h2 class="title">Scenes of Us</h2>
-      <p class="text">옆으로 넘기며 저희의 장면들을 함께 봐주세요.</p>
-
-      <div class="gallery-track">
-        <figure class="gallery-card">
-          <img src="images/gallery01.jpg" alt="gallery scene 01" class="zoomable" />
-          <figcaption>SCENE 01</figcaption>
-        </figure>
-        <figure class="gallery-card">
-          <img src="images/gallery02.jpg" alt="gallery scene 02" class="zoomable" />
-          <figcaption>SCENE 02</figcaption>
-        </figure>
-        <figure class="gallery-card">
-          <img src="images/gallery03.jpg" alt="gallery scene 03" class="zoomable" />
-          <figcaption>SCENE 03</figcaption>
-        </figure>
-        <figure class="gallery-card">
-          <img src="images/gallery04.jpg" alt="gallery scene 04" class="zoomable" />
-          <figcaption>SCENE 04</figcaption>
-        </figure>
-        <figure class="gallery-card">
-          <img src="images/gallery05.jpg" alt="gallery scene 05" class="zoomable" />
-          <figcaption>SCENE 05</figcaption>
-        </figure>
-        <figure class="gallery-card">
-          <img src="images/gallery06.jpg" alt="gallery scene 06" class="zoomable" />
-          <figcaption>SCENE 06</figcaption>
-        </figure>
-      </div>
+    <section class="section film-section point-section reveal" id="gallery">
+      <p class="section-number">No. 03</p>
+      <h2 class="script-title">Gallery</h2>
+      <p class="ko-copy small">옆으로 넘기며 저희의 장면들을 함께 봐주세요.</p>
+      <div class="film-strip" id="galleryList"></div>
     </section>
 
-    <!-- =====================================================
-      07. 오시는 길
-      네이버 지도 API + 카카오맵
-      API 키 전에는 images/naver-map.jpg 이미지가 표시됨
-    ====================================================== -->
-    <section class="location fade">
-      <p class="label">LOCATION</p>
-      <h2 class="title">The Venue</h2>
-
+    <section class="section venue-section reveal" id="venue">
+      <p class="section-number">No. 04</p>
+      <h2 class="serif-title">The Venue</h2>
       <div class="venue-card">
-        <h3 class="venue-name">웨딩시그니처</h3>
-        <p class="venue-address">서울 마포구 양화로 87<br />트리니티홀</p>
-
-        <a class="btn outline call-btn" href="tel:02-0000-0000">안내 전화</a>
-
-        <!-- 네이버 지도 API 영역 -->
-        <div id="naverMap" class="naver-map"></div>
-
-        <!-- API 키를 넣기 전 대체용 이미지 지도 -->
-        <a class="map-fallback" id="mapFallback" href="https://map.naver.com/p/search/웨딩시그니처" target="_blank">
-          <img src="images/naver-map.jpg" alt="웨딩시그니처 네이버 지도 미리보기" />
-          <span>네이버지도에서 위치 보기</span>
-        </a>
-
-        <div class="btn-group map-buttons">
-          <a id="naverBtn" class="btn" href="https://map.naver.com/p/search/웨딩시그니처" target="_blank">네이버 지도</a>
-          <a id="kakaoBtn" class="btn outline" href="https://map.kakao.com/link/search/웨딩시그니처" target="_blank">카카오맵</a>
+        <img class="venue-photo" src="images/venue.jpg" alt="웨딩홀 사진" onerror="this.style.display='none'" />
+        <h3 id="venueName">웨딩시그니처 2F 트리니티홀</h3>
+        <p id="venueAddress">서울 마포구 양화로 87</p>
+        <a class="outline-button call" id="phoneButton" href="#">안내 전화</a>
+        <div class="map-wrap">
+          <div id="naverMap" class="map-api"></div>
+          <a id="mapFallback" class="map-fallback" href="#" target="_blank" rel="noopener">
+            <img src="images/map-preview.jpg" alt="지도 미리보기" />
+            <span>네이버지도에서 위치 보기</span>
+          </a>
+        </div>
+        <div class="map-buttons">
+          <a id="naverBtn" class="solid-button" href="#" target="_blank" rel="noopener">네이버 지도</a>
+          <a id="kakaoBtn" class="outline-button" href="#" target="_blank" rel="noopener">카카오맵</a>
+          <a id="tmapBtn" class="outline-button" href="#" target="_blank" rel="noopener">티맵</a>
         </div>
       </div>
     </section>
 
-    <!-- =====================================================
-      08. 안내사항
-    ====================================================== -->
-    <section class="notice fade">
-      <p class="label">NOTICE</p>
-      <h2 class="title">Information</h2>
-
-      <div class="notice-list">
-        <div class="notice-item">
-          <strong>주차 안내</strong>
-          <p>웨딩홀 주차장을 이용하실 수 있습니다.</p>
+    <section class="section transport-section point-section reveal" id="transport">
+      <p class="section-number">No. 05</p>
+      <h2 class="serif-title">Transportation</h2>
+      <div class="transport-card">
+        <div class="transport-block">
+          <h3>지하철</h3>
+          <div id="subwayList"></div>
+          <p class="walk" id="walkInfo"></p>
         </div>
-        <div class="notice-item">
-          <strong>식사 안내</strong>
-          <p>예식 후 연회장에서 식사가 준비됩니다.</p>
+        <div class="dotted-line"></div>
+        <div class="transport-block">
+          <h3>버스</h3>
+          <div id="busList"></div>
         </div>
-        <div class="notice-item">
-          <strong>마음 전하실 곳</strong>
-          <p>참석이 어려우신 분들을 위해 계좌를 안내드립니다.</p>
-        </div>
+        <p class="parking-note" id="parkingNote"></p>
       </div>
     </section>
 
-
-    <!-- =====================================================
-      09. 공유하기
-      카카오톡 공유 / 링크 복사
-    ====================================================== -->
-    <section class="share-section fade">
-      <p class="label">SHARE</p>
-      <h2 class="title">Share Our Day</h2>
-      <p class="text">소중한 분들께 청첩장 링크를 공유해 주세요.</p>
-
-      <div class="share-card">
-        <button class="btn kakao-share-btn" id="kakaoShareBtn" type="button">카카오톡으로 공유하기</button>
-        <button class="btn outline link-copy-btn" id="linkCopyBtn" type="button">링크 복사하기</button>
+    <section class="section afterparty-section reveal" id="afterPartySection">
+      <div class="ornament">✦</div>
+      <p class="section-number">No. 06</p>
+      <h2 class="script-title" id="afterPartyTitle">After Party</h2>
+      <div class="afterparty-card">
+        <p id="afterPartyMessage">예식 후 가까운 분들과 함께하는 작은 자리를 준비했습니다.</p>
+        <dl>
+          <dt>시간</dt><dd id="afterPartyTime">예식 후 오후 7시 30분</dd>
+          <dt>장소</dt><dd id="afterPartyPlace">장소를 입력해주세요</dd>
+          <dt>주소</dt><dd id="afterPartyAddress">주소를 입력해주세요</dd>
+        </dl>
+        <a class="outline-button" id="afterPartyMapBtn" href="#" target="_blank" rel="noopener">뒤풀이 장소 지도 보기</a>
       </div>
     </section>
 
-    <!-- =====================================================
-      10. 계좌 안내
-    ====================================================== -->
-    <section class="account-section fade">
-      <p class="label">ACCOUNT</p>
-      <h2 class="title">마음 전하실 곳</h2>
+    <section class="section notice-section reveal" id="notice">
+      <p class="section-number">No. 07</p>
+      <h2 class="serif-title">Notice</h2>
+      <div class="notice-list" id="noticeList"></div>
+    </section>
 
-      <div class="account">
-        <span>BRIDE</span>
-        <strong>박예슬</strong>
-        <p>국민은행 000000-00-000000</p>
-        <div class="account-actions">
-          <button class="copy-btn" type="button" onclick="copyAccount('00000000000000')">계좌번호 복사</button>
-          <a class="pay-btn" href="여기에_신부_카카오페이_송금링크" target="_blank">카카오페이</a>
-        </div>
-      </div>
+    <section class="section account-section point-section reveal" id="account">
+      <div class="ornament">❧</div>
+      <p class="section-number">No. 08</p>
+      <h2 class="script-title">With Love</h2>
+      <p class="ko-copy small">참석이 어려우신 분들을 위해 마음 전하실 곳을 안내드립니다.</p>
+      <div class="account-list" id="accountList"></div>
+    </section>
 
-      <div class="account">
-        <span>GROOM</span>
-        <strong>김종훈</strong>
-        <p>신한은행 000000-00-000000</p>
-        <div class="account-actions">
-          <button class="copy-btn" type="button" onclick="copyAccount('00000000000000')">계좌번호 복사</button>
-          <a class="pay-btn" href="여기에_신랑_카카오페이_송금링크" target="_blank">카카오페이</a>
-        </div>
+    <section class="section share-section reveal">
+      <h2 class="serif-title">Share</h2>
+      <p class="ko-copy small">소중한 분들께 청첩장 링크를 전해주세요.</p>
+      <div class="share-buttons">
+        <button class="solid-button" type="button" id="kakaoShareBtn">카카오톡 공유</button>
+        <button class="outline-button" type="button" id="copyLinkBtn">링크 복사</button>
       </div>
     </section>
 
-    <!-- =====================================================
-      11. 엔딩
-      수정 이미지: images/ending.jpg
-    ====================================================== -->
-    <section class="ending fade">
-      <div>
-        <h2>Thank you</h2>
-        <p>DIRECTED BY LOVE</p>
+    <section class="section photo-upload-section point-section reveal" id="photoUploadSection">
+      <div class="ornament">✢</div>
+      <p class="section-number">No. 09</p>
+      <h2 class="script-title" id="photoUploadTitle">Share Your Photos</h2>
+      <p class="ko-copy small" id="photoUploadMessage">본식에서 담아주신 소중한 순간을 이곳에 올려주세요.</p>
+      <a class="upload-button" id="photoUploadBtn" href="#" target="_blank" rel="noopener">사진 업로드하기</a>
+    </section>
+
+    <section class="ending reveal">
+      <div class="ending-bg"></div>
+      <div class="ending-overlay"></div>
+      <div class="ending-content">
+        <p class="eyebrow light">WITH LOVE</p>
+        <h2>Thank You</h2>
+        <p id="endingNames">Jonghoon · Yeseul</p>
       </div>
     </section>
   </main>
 
-  <!-- 갤러리 전체화면 모달 -->
-  <div id="galleryModal" class="gallery-modal" aria-hidden="true">
-    <button class="gallery-close" id="galleryClose" type="button" aria-label="갤러리 닫기">×</button>
-    <img id="galleryModalImg" src="" alt="확대된 갤러리 이미지" />
+  <div class="gallery-modal" id="galleryModal" aria-hidden="true">
+    <button class="modal-close" type="button" id="modalClose" aria-label="닫기">×</button>
+    <button class="modal-arrow prev" type="button" id="modalPrev" aria-label="이전 사진">‹</button>
+    <img id="modalImage" src="" alt="확대 이미지" />
+    <button class="modal-arrow next" type="button" id="modalNext" aria-label="다음 사진">›</button>
   </div>
 
-  <!-- 기능 파일 -->
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,265 +1,275 @@
-/* =====================================================
-  Wedding Invitation 기능 파일
-  수정하기 쉬운 곳은 '기본 정보' 영역에 모아두었습니다.
-===================================================== */
+let galleryIndex = 0;
+const qs = (id) => document.getElementById(id);
+const enc = (text) => encodeURIComponent(text);
 
-/* =====================================================
-  01. 기본 정보
-===================================================== */
-const WEDDING_DATE = "2027-08-21T16:20:00";
-const MAP_SEARCH = "웨딩시그니처";
-const VENUE_LAT = 37.549626; // 네이버 지도 API 좌표: 필요하면 수정
-const VENUE_LNG = 126.918139; // 네이버 지도 API 좌표: 필요하면 수정
+function initContent(){
+  qs("heroGroom").textContent = WEDDING.groomEn;
+  qs("heroBride").textContent = WEDDING.brideEn;
+  qs("dateDisplayKo").textContent = WEDDING.displayDateKo;
+  qs("timeDisplayKo").textContent = WEDDING.displayTimeKo;
+  qs("groomKo").textContent = WEDDING.groomKo;
+  qs("brideKo").textContent = WEDDING.brideKo;
+  qs("venueName").textContent = WEDDING.venue;
+  qs("venueAddress").textContent = WEDDING.address;
+  qs("endingNames").textContent = `${WEDDING.groomEn} · ${WEDDING.brideEn}`;
+  qs("phoneButton").href = `tel:${WEDDING.phone}`;
+}
 
-// 카카오톡 공유 JavaScript 키
-// 카카오 개발자센터에서 발급받은 JavaScript 키를 아래 따옴표 안에 넣으면 카카오톡 공유가 활성화됩니다.
-// 키를 비워두면 자동으로 링크 복사 기능으로 대체됩니다.
-const KAKAO_JS_KEY = "";
-
-/* =====================================================
-  02. D-DAY 계산
-===================================================== */
-const ddayEl = document.getElementById("dday");
-
-if (ddayEl) {
-  const weddingDate = new Date(WEDDING_DATE);
+function initCalendar(){
+  const date = new Date(`${WEDDING.date}T${WEDDING.time}:00`);
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const weddingDay = date.getDate();
+  const firstDay = new Date(year, month, 1).getDay();
+  const lastDate = new Date(year, month + 1, 0).getDate();
+  qs("calendarMonthTitle").textContent = date.toLocaleString("en-US", { month: "long" });
+  const grid = qs("calendarGrid");
+  grid.innerHTML = "";
+  for(let i=0;i<firstDay;i++) grid.insertAdjacentHTML("beforeend", `<span class="calendar-day empty"></span>`);
+  for(let day=1;day<=lastDate;day++){
+    grid.insertAdjacentHTML("beforeend", `<span class="${day===weddingDay ? "calendar-day wedding" : "calendar-day"}">${day}</span>`);
+  }
   const today = new Date();
-  const diff = weddingDate - today;
-  const dday = Math.ceil(diff / (1000 * 60 * 60 * 24));
-
-  ddayEl.innerText = dday > 0 ? `예식까지 D-${dday}` : "오늘이 예식일입니다";
+  const diff = date - today;
+  const dday = Math.ceil(diff / (1000*60*60*24));
+  qs("dday").textContent = dday > 0 ? `예식까지 D-${dday}` : "오늘이 예식일입니다";
 }
 
-/* =====================================================
-  03. 스크롤 등장 애니메이션
-===================================================== */
-const fadeEls = document.querySelectorAll(".fade");
-const timelineItems = document.querySelectorAll(".timeline-item");
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("show");
-    }
-  });
-}, { threshold: 0.18 });
-
-fadeEls.forEach((el) => observer.observe(el));
-timelineItems.forEach((el) => observer.observe(el));
-
-/* =====================================================
-  04. 계좌번호 복사
-===================================================== */
-function copyAccount(account) {
-  navigator.clipboard.writeText(account).then(() => {
-    alert("계좌번호가 복사되었습니다.");
+function initTimeline(){
+  const list = qs("timelineList");
+  list.innerHTML = "";
+  WEDDING.timeline.forEach(item=>{
+    list.insertAdjacentHTML("beforeend", `
+      <article class="story-item">
+        <div class="story-image"><img src="${item.img}" alt="${item.title}"></div>
+        <div class="story-copy"><span>${item.label}</span><h3>${item.title}</h3><p>${item.text}</p></div>
+      </article>
+    `);
   });
 }
 
-/* =====================================================
-  05. BGM ON/OFF
-===================================================== */
-const bgm = document.getElementById("bgm");
-const soundBtn = document.getElementById("soundBtn");
-let isPlaying = false;
-
-if (bgm && soundBtn) {
-  soundBtn.addEventListener("click", async () => {
-    try {
-      if (!isPlaying) {
-        await bgm.play();
-        isPlaying = true;
-        soundBtn.innerText = "BGM ON";
-      } else {
-        bgm.pause();
-        isPlaying = false;
-        soundBtn.innerText = "BGM OFF";
-      }
-    } catch (error) {
-      alert("브라우저 설정상 음악을 재생할 수 없습니다.");
-    }
+function initGallery(){
+  const list = qs("galleryList");
+  list.innerHTML = "";
+  WEDDING.gallery.forEach((src,i)=>{
+    const card = document.createElement("button");
+    card.className = "film-card";
+    card.type = "button";
+    card.onclick = () => openGallery(i);
+    card.innerHTML = `<img src="${src}" alt="gallery ${i+1}"><div class="film-caption">SCENE ${String(i+1).padStart(2,"0")}</div>`;
+    list.appendChild(card);
   });
 }
 
-/* =====================================================
-  06. 캘린더 저장
-===================================================== */
-const calendarBtn = document.getElementById("calendarBtn");
-
-if (calendarBtn) {
-  calendarBtn.addEventListener("click", () => {
-    const title = encodeURIComponent("종훈 & 예슬 결혼식");
-    const location = encodeURIComponent("웨딩시그니처, 서울 마포구 양화로 87");
-    const details = encodeURIComponent("종훈 그리고 예슬의 결혼식에 초대합니다.");
-
-    // Google Calendar 형식: 20270821T162000/20270821T182000
-    const googleCalendarUrl =
-      `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=20270821T162000/20270821T182000&details=${details}&location=${location}`;
-
-    window.open(googleCalendarUrl, "_blank");
-  });
+function openGallery(index){
+  galleryIndex = index;
+  qs("modalImage").src = WEDDING.gallery[galleryIndex];
+  qs("galleryModal").classList.add("show");
+  qs("galleryModal").setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+}
+function closeGallery(){
+  qs("galleryModal").classList.remove("show");
+  qs("galleryModal").setAttribute("aria-hidden","true");
+  qs("modalImage").src = "";
+  document.body.style.overflow = "";
+}
+function moveGallery(direction){
+  galleryIndex = (galleryIndex + direction + WEDDING.gallery.length) % WEDDING.gallery.length;
+  qs("modalImage").src = WEDDING.gallery[galleryIndex];
 }
 
-/* =====================================================
-  07. 지도 버튼 검색어 자동 세팅
-===================================================== */
-const naverBtn = document.getElementById("naverBtn");
-const kakaoBtn = document.getElementById("kakaoBtn");
-const mapFallback = document.getElementById("mapFallback");
+function initMapLinks(){
+  qs("naverBtn").href = `https://map.naver.com/p/search/${enc(WEDDING.mapSearch)}`;
+  qs("kakaoBtn").href = `https://map.kakao.com/link/search/${enc(WEDDING.mapSearch)}`;
+  qs("tmapBtn").href = `https://apis.openapi.sk.com/tmap/app/routes?name=${enc(WEDDING.mapSearch)}`;
+  qs("mapFallback").href = `https://map.naver.com/p/search/${enc(WEDDING.mapSearch)}`;
 
-if (naverBtn) {
-  naverBtn.href = `https://map.naver.com/p/search/${encodeURIComponent(MAP_SEARCH)}`;
-}
-
-if (kakaoBtn) {
-  kakaoBtn.href = `https://map.kakao.com/link/search/${encodeURIComponent(MAP_SEARCH)}`;
-}
-
-if (mapFallback) {
-  mapFallback.href = `https://map.naver.com/p/search/${encodeURIComponent(MAP_SEARCH)}`;
-}
-
-/* =====================================================
-  08. 네이버 지도 API
-  - API 키를 넣으면 확대/축소 가능한 지도가 표시됩니다.
-  - API 키가 없거나 오류가 나면 이미지 지도(images/naver-map.jpg)가 표시됩니다.
-===================================================== */
-function initNaverMap() {
-  const mapEl = document.getElementById("naverMap");
-  const fallbackEl = document.getElementById("mapFallback");
-
-  if (!mapEl) return;
-
-  if (window.naver && window.naver.maps) {
-    const venuePosition = new naver.maps.LatLng(VENUE_LAT, VENUE_LNG);
-
-    const map = new naver.maps.Map("naverMap", {
-      center: venuePosition,
-      zoom: 16,
-      zoomControl: true,
-      zoomControlOptions: {
-        position: naver.maps.Position.RIGHT_CENTER
-      }
-    });
-
-    new naver.maps.Marker({
-      position: venuePosition,
-      map: map
-    });
-
-    mapEl.classList.add("active");
-    if (fallbackEl) fallbackEl.classList.add("hide");
-  } else {
-    mapEl.classList.remove("active");
-    if (fallbackEl) fallbackEl.classList.remove("hide");
+  if(WEDDING.naverMapClientId){
+    const script = document.createElement("script");
+    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${WEDDING.naverMapClientId}`;
+    script.onload = initNaverMap;
+    document.head.appendChild(script);
   }
 }
-
-window.addEventListener("load", initNaverMap);
-
-/* =====================================================
-  09. 갤러리 전체화면 확대 보기
-===================================================== */
-const galleryModal = document.getElementById("galleryModal");
-const galleryModalImg = document.getElementById("galleryModalImg");
-const galleryClose = document.getElementById("galleryClose");
-const zoomableImages = document.querySelectorAll(".zoomable");
-
-function openGallery(src, alt) {
-  if (!galleryModal || !galleryModalImg) return;
-
-  galleryModalImg.src = src;
-  galleryModalImg.alt = alt || "확대된 갤러리 이미지";
-  galleryModal.classList.add("show");
-  galleryModal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("modal-open");
+function initNaverMap(){
+  if(!window.naver) return;
+  qs("naverMap").style.display = "block";
+  qs("mapFallback").style.display = "none";
+  const position = new naver.maps.LatLng(WEDDING.mapLat, WEDDING.mapLng);
+  const map = new naver.maps.Map("naverMap", {center: position, zoom: 16, zoomControl: true, zoomControlOptions:{position: naver.maps.Position.RIGHT_CENTER}});
+  new naver.maps.Marker({position, map});
 }
 
-function closeGallery() {
-  if (!galleryModal || !galleryModalImg) return;
-
-  galleryModal.classList.remove("show");
-  galleryModal.setAttribute("aria-hidden", "true");
-  galleryModalImg.src = "";
-  document.body.classList.remove("modal-open");
+function initTransportation(){
+  qs("subwayList").innerHTML = WEDDING.transportation.subway.map(item=>`<p class="transport-row"><span class="route-dot" style="background:${item.color}"></span>${item.text}</p>`).join("");
+  qs("busList").innerHTML = WEDDING.transportation.bus.map(item=>`<p class="transport-row"><span class="route-dot" style="background:${item.color}"></span>${item.text}</p>`).join("");
+  qs("walkInfo").textContent = `· ${WEDDING.transportation.walk}`;
+  qs("parkingNote").textContent = WEDDING.transportation.parking;
 }
 
-zoomableImages.forEach((img) => {
-  img.addEventListener("click", () => {
-    openGallery(img.src, img.alt);
-  });
-});
-
-if (galleryClose) {
-  galleryClose.addEventListener("click", closeGallery);
+function initAfterParty(){
+  const data = WEDDING.afterParty;
+  const section = qs("afterPartySection");
+  if(!data.show){ section.style.display = "none"; return; }
+  qs("afterPartyTitle").textContent = data.title;
+  qs("afterPartyMessage").textContent = data.message;
+  qs("afterPartyTime").textContent = data.time;
+  qs("afterPartyPlace").textContent = data.place;
+  qs("afterPartyAddress").textContent = data.address;
+  qs("afterPartyMapBtn").href = `https://map.naver.com/p/search/${enc(data.mapSearch || data.place)}`;
 }
 
-if (galleryModal) {
-  galleryModal.addEventListener("click", (event) => {
-    if (event.target === galleryModal) {
-      closeGallery();
-    }
-  });
+function initNotice(){
+  qs("noticeList").innerHTML = WEDDING.notice.map(item=>`<div class="notice-item"><strong>${item.title}</strong><p>${item.text}</p></div>`).join("");
 }
 
-window.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    closeGallery();
-  }
-});
+function initAccounts(){
+  const list = qs("accountList");
+  list.innerHTML = "";
 
+  const groups = WEDDING.accountGroups || [];
 
-/* =====================================================
-  10. 카카오톡 공유 / 링크 복사
-===================================================== */
-const kakaoShareBtn = document.getElementById("kakaoShareBtn");
-const linkCopyBtn = document.getElementById("linkCopyBtn");
+  groups.forEach((group, index)=>{
+    const groupEl = document.createElement("article");
+    groupEl.className = "account-group";
 
-function copyCurrentLink() {
-  const currentUrl = window.location.href;
+    const peopleHtml = group.people.map(person=>`
+      <div class="account-person">
+        <div>
+          <span class="account-role">${person.label}</span>
+          <strong>${person.name}</strong>
+          <p>${person.bank} ${person.number}</p>
+        </div>
+        <button class="copy-small" type="button" data-copy="${person.copyNumber}">복사</button>
+      </div>
+    `).join("");
 
-  navigator.clipboard.writeText(currentUrl).then(() => {
-    alert("청첩장 링크가 복사되었습니다.");
-  });
-}
+    groupEl.innerHTML = `
+      <button class="account-toggle" type="button" aria-expanded="false">
+        <span>${group.title}</span>
+        <em>+</em>
+      </button>
+      <div class="account-panel">
+        ${peopleHtml}
+      </div>
+    `;
 
-if (linkCopyBtn) {
-  linkCopyBtn.addEventListener("click", copyCurrentLink);
-}
+    const toggle = groupEl.querySelector(".account-toggle");
+    toggle.addEventListener("click", ()=>{
+      const isOpen = groupEl.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
+    });
 
-if (kakaoShareBtn) {
-  kakaoShareBtn.addEventListener("click", () => {
-    const shareUrl = window.location.href;
-
-    if (window.Kakao && KAKAO_JS_KEY) {
-      if (!Kakao.isInitialized()) {
-        Kakao.init(KAKAO_JS_KEY);
-      }
-
-      Kakao.Share.sendDefault({
-        objectType: "feed",
-        content: {
-          title: "종훈 & 예슬의 결혼식에 초대합니다",
-          description: "2027년 8월 21일 토요일 오후 4시 20분 · 웨딩시그니처",
-          imageUrl: new URL("images/hero.jpg", window.location.href).href,
-          link: {
-            mobileWebUrl: shareUrl,
-            webUrl: shareUrl
-          }
-        },
-        buttons: [
-          {
-            title: "청첩장 보기",
-            link: {
-              mobileWebUrl: shareUrl,
-              webUrl: shareUrl
-            }
-          }
-        ]
+    groupEl.querySelectorAll(".copy-small").forEach(button=>{
+      button.addEventListener("click", (event)=>{
+        event.stopPropagation();
+        copyText(button.dataset.copy, "계좌번호가 복사되었습니다.");
       });
-    } else {
-      copyCurrentLink();
+    });
+
+    // 첫 번째 신랑측 계좌는 기본으로 닫힌 상태가 더 깔끔합니다.
+    if(index === 0) {
+      groupEl.classList.remove("open");
+    }
+
+    list.appendChild(groupEl);
+  });
+}
+
+function copyText(text, message){ navigator.clipboard.writeText(text).then(()=>alert(message)); }
+function initPhotoUpload(){
+  const section = qs("photoUploadSection");
+  const data = WEDDING.photoUpload || {};
+  if(!section) return;
+  if(data.show === false){ section.style.display = "none"; return; }
+  qs("photoUploadTitle").textContent = data.title || "Share Your Photos";
+  qs("photoUploadMessage").textContent = data.message || "본식에서 담아주신 소중한 순간을 이곳에 올려주세요.";
+  const btn = qs("photoUploadBtn");
+  btn.textContent = data.buttonText || "사진 업로드하기";
+  btn.href = data.url || "#";
+  btn.addEventListener("click", (e)=>{
+    if(!data.url || data.url.includes("여기에_")){
+      e.preventDefault();
+      alert("config.js의 photoUpload.url에 구글드라이브 업로드 링크를 넣어주세요.");
     }
   });
 }
 
+function initShare(){
+  qs("copyLinkBtn").onclick = () => copyText(location.href, "청첩장 링크가 복사되었습니다.");
+  qs("kakaoShareBtn").onclick = () => {
+    const text = `${WEDDING.groomKo} ♥ ${WEDDING.brideKo} 결혼합니다.\n${WEDDING.displayDateKo} ${WEDDING.displayTimeKo}\n${WEDDING.venue}\n${location.href}`;
+    copyText(text, "카카오톡에 붙여넣을 초대 문구가 복사되었습니다.");
+  };
+}
+function initBgm(){
+  const bgm = qs("bgm"), btn = qs("bgmButton");
+  let playing = false;
+  btn.onclick = async()=>{
+    if(!playing){
+      try{ await bgm.play(); playing=true; btn.textContent="♫"; }
+      catch(e){ alert("음악 파일을 music/bgm.mp3로 넣으면 재생됩니다."); }
+    } else { bgm.pause(); playing=false; btn.textContent="♪"; }
+  };
+}
+function initReveal(){
+  const observer = new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting) entry.target.classList.add("show");}),{threshold:.16});
+  document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+}
+function initScrollProgress(){
+  const bar = qs("scrollProgress");
+  window.addEventListener("scroll",()=>{
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.height = `${max > 0 ? (scrollY / max) * 100 : 0}%`;
+  });
+}
+function initModalEvents(){
+  qs("modalClose").onclick = closeGallery;
+  qs("modalPrev").onclick = () => moveGallery(-1);
+  qs("modalNext").onclick = () => moveGallery(1);
+  qs("galleryModal").addEventListener("click",e=>{ if(e.target.id === "galleryModal") closeGallery(); });
+  document.addEventListener("keydown",e=>{
+    if(!qs("galleryModal").classList.contains("show")) return;
+    if(e.key === "Escape") closeGallery();
+    if(e.key === "ArrowLeft") moveGallery(-1);
+    if(e.key === "ArrowRight") moveGallery(1);
+  });
+
+  let touchStartX = 0;
+  qs("galleryModal").addEventListener("touchstart", e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive:true });
+  qs("galleryModal").addEventListener("touchend", e => {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if(Math.abs(diff) < 50) return;
+    diff > 0 ? moveGallery(-1) : moveGallery(1);
+  }, { passive:true });
+}
+
+window.addEventListener("DOMContentLoaded",()=>{
+  initContent(); initCalendar(); initTimeline(); initGallery(); initMapLinks(); initTransportation(); initAfterParty(); initNotice(); initAccounts(); initPhotoUpload(); initShare(); initBgm(); initReveal(); initScrollProgress(); initModalEvents();
+});
+
+
+/* =====================================================
+   V4 상단 고정 미니 메뉴
+===================================================== */
+function initMiniNav(){
+  const nav = document.getElementById("miniNav");
+  if(!nav) return;
+  const links = Array.from(nav.querySelectorAll("a"));
+  const sections = links.map(link => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+
+  window.addEventListener("scroll", () => {
+    nav.classList.toggle("show", window.scrollY > window.innerHeight * 0.55);
+
+    let current = sections[0];
+    sections.forEach(section => {
+      if(section.getBoundingClientRect().top < 140) current = section;
+    });
+    links.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${current.id}`));
+  }, { passive:true });
+}
+
+window.addEventListener("DOMContentLoaded", initMiniNav);

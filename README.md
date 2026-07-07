@@ -1,57 +1,55 @@
-# Wedding Invitation
+# Wedding Editorial Invitation V3
 
-모바일 청첩장 프로젝트입니다. GitHub Pages에 업로드하면 무료 링크로 공유할 수 있습니다.
+GitHub Pages에 바로 올릴 수 있는 모바일 청첩장 프로젝트입니다.
 
-## 파일 구조
+## 수정 위치
+- `config.js` : 이름, 날짜, 장소, 교통 안내, 애프터파티, 계좌 등 정보 수정
+- `images/hero.jpg` : 첫 화면 긴 사진
+- `images/ending.jpg` : 마지막 화면 사진
+- `images/venue.jpg` : 예식장 사진
+- `images/map-preview.jpg` : 지도 캡처 이미지
+- `images/gallery01.jpg` ~ : 갤러리 사진
+- `music/bgm.mp3` : 배경음악
 
-- `index.html` : 청첩장 내용
-- `style.css` : 디자인, 컬러, 여백, 반짝이 효과
-- `script.js` : D-day, 지도, BGM, 계좌 복사, 갤러리 확대, 카카오톡 공유
-- `images/` : 사진 폴더
-- `music/bgm.mp3` : 배경음악 파일
-
-## 이미지 파일명
-
-아래 이름으로 이미지를 넣으면 자동으로 연결됩니다.
-
-- `images/hero.jpg` : 첫 화면 오프닝 이미지
-- `images/ending.jpg` : 엔딩 이미지
-- `images/naver-map.jpg` : 네이버 지도 API 키가 없을 때 보이는 지도 캡처 이미지
-- `images/timeline01.jpg` ~ `images/timeline04.jpg` : 타임라인 이미지
-- `images/gallery01.jpg` ~ `images/gallery06.jpg` : 갤러리 이미지
-
-## 카카오톡 공유 버튼
-
-`script.js` 상단의 아래 부분에 카카오 개발자센터에서 발급받은 JavaScript 키를 넣으면 카카오톡 공유가 활성화됩니다.
-
-```js
-const KAKAO_JS_KEY = "여기에_카카오_JavaScript_키";
-```
-
-키를 비워두면 카카오톡 공유 버튼을 눌렀을 때 링크 복사로 대체됩니다.
-
-## GitHub Pages 배포
-
-1. GitHub Repository에 파일 업로드
-2. `Settings` 클릭
-3. 왼쪽 메뉴 `Pages` 클릭
-4. Source: `Deploy from a branch`
-5. Branch: `main`, Folder: `/root`
-6. `Save`
-7. 1~3분 후 `https://아이디.github.io/wedding_invitation/` 링크 확인
+## GitHub 업로드
+압축을 푼 뒤 폴더 안의 모든 파일을 Repository에 업로드하고 Commit changes를 누르면 됩니다.
+기존 GitHub Pages 링크는 그대로 유지되고 자동 업데이트됩니다.
 
 
-## 이번 버전 변경사항
+## 계좌번호 수정
+`config.js`의 `accountGroups`에서 신랑측/신부측 계좌, 혼주 성함, 은행명, 계좌번호를 수정하면 됩니다.
 
-- 배경 반짝이 효과 제거
-- RSVP 참석 여부 섹션 제거
-- 계좌번호 복사 버튼 옆에 카카오페이 송금 버튼 추가
 
-## 카카오페이 버튼 연결 방법
+## V4 업데이트
+- 버건디 배경 + 베이지 폰트 포인트 섹션 적용
+- 상단 고정 미니 메뉴 추가: 초대글 / 일정 / 이야기 / 갤러리 / 오시는길 / 전하실곳
+- 스크롤 위치에 따라 메뉴가 자연스럽게 나타나고 현재 섹션이 표시됩니다.
 
-`index.html`에서 아래 문구를 각자 카카오페이 송금 링크로 교체하세요.
 
-- `여기에_신부_카카오페이_송금링크`
-- `여기에_신랑_카카오페이_송금링크`
+## V5 final polish
+- 버건디 컬러를 #550D07 계열로 변경
+- 상단 고정 메뉴는 Pretendard / Noto Sans KR 계열로 변경
+- 버건디 포인트 섹션에 매트한 종이 질감 추가
+- Hero 줌인, 섹션 여백, 버튼/카드 디테일 보정
+- 갤러리 전체화면에서 좌우 버튼 + 키보드 + 모바일 스와이프 지원
 
-카카오페이 송금 링크는 카카오페이 송금 QR/송금 링크에서 복사한 주소를 넣으면 됩니다.
+
+## V6 Update
+- 버건디 그라데이션 제거
+- 갈색기 줄인 딥 레드 컬러 적용: #7A0B10
+- 버건디 섹션에 은은한 종이 질감 유지
+- 사진이 더 돋보이도록 섀도우/섹션 톤 정리
+
+
+## V6.1 Update
+- 첫 화면 Hero 높이를 약간 줄였습니다.
+- 인트로 이미지 위 날짜/시간 표기를 제거했습니다.
+- 마지막 쪽에 하객 사진 업로드용 구글드라이브 버튼을 추가했습니다.
+- `config.js`의 `photoUpload.url`에 구글드라이브 폴더 공유 링크를 넣으면 버튼이 연결됩니다.
+
+## 구글드라이브 사진 업로드 링크 만들기
+1. Google Drive에서 새 폴더를 만듭니다.
+2. 폴더 우클릭 → 공유를 누릅니다.
+3. 일반 액세스를 `링크가 있는 모든 사용자`로 변경합니다.
+4. 권한을 `편집자`로 설정합니다.
+5. 링크를 복사해서 `config.js`의 `photoUpload.url`에 붙여넣습니다.
