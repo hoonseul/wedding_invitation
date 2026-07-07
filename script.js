@@ -263,32 +263,3 @@ if (kakaoShareBtn) {
   });
 }
 
-/* =====================================================
-  11. 배경 반짝이 내리는 효과
-===================================================== */
-const sparkleField = document.getElementById("sparkleField");
-
-function createSparkle() {
-  if (!sparkleField) return;
-
-  const sparkle = document.createElement("span");
-  sparkle.className = "sparkle";
-
-  const size = Math.random() * 3 + 2;
-  const left = Math.random() * 100;
-  const duration = Math.random() * 4 + 5;
-  const drift = (Math.random() * 80 - 40).toFixed(1);
-
-  sparkle.style.left = `${left}%`;
-  sparkle.style.setProperty("--size", `${size}px`);
-  sparkle.style.setProperty("--duration", `${duration}s`);
-  sparkle.style.setProperty("--drift", `${drift}px`);
-
-  sparkleField.appendChild(sparkle);
-
-  setTimeout(() => {
-    sparkle.remove();
-  }, duration * 1000);
-}
-
-setInterval(createSparkle, 420);

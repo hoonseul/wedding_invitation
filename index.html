@@ -22,8 +22,6 @@
 </head>
 
 <body>
-  <!-- 배경 반짝이 효과 영역: script.js에서 자동으로 생성됩니다 -->
-  <div class="sparkle-field" id="sparkleField" aria-hidden="true"></div>
 
   <main class="wrap">
 
@@ -253,21 +251,9 @@
       </div>
     </section>
 
-    <!-- =====================================================
-      09. RSVP
-      구글폼 주소 연결 가능
-    ====================================================== -->
-    <section class="rsvp fade">
-      <p class="label">RSVP</p>
-      <h2 class="title">Will you join us?</h2>
-      <p class="text">참석 여부를 알려주시면 준비에 큰 도움이 됩니다.</p>
-      <a class="btn rsvp-btn" href="https://forms.google.com" target="_blank">참석 여부 전달하기</a>
-    </section>
-
-
 
     <!-- =====================================================
-      10. 공유하기
+      09. 공유하기
       카카오톡 공유 / 링크 복사
     ====================================================== -->
     <section class="share-section fade">
@@ -282,7 +268,7 @@
     </section>
 
     <!-- =====================================================
-      11. 계좌 안내
+      10. 계좌 안내
     ====================================================== -->
     <section class="account-section fade">
       <p class="label">ACCOUNT</p>
@@ -292,19 +278,25 @@
         <span>BRIDE</span>
         <strong>박예슬</strong>
         <p>국민은행 000000-00-000000</p>
-        <button class="copy-btn" type="button" onclick="copyAccount('00000000000000')">계좌번호 복사</button>
+        <div class="account-actions">
+          <button class="copy-btn" type="button" onclick="copyAccount('00000000000000')">계좌번호 복사</button>
+          <a class="pay-btn" href="여기에_신부_카카오페이_송금링크" target="_blank">카카오페이</a>
+        </div>
       </div>
 
       <div class="account">
         <span>GROOM</span>
         <strong>김종훈</strong>
         <p>신한은행 000000-00-000000</p>
-        <button class="copy-btn" type="button" onclick="copyAccount('00000000000000')">계좌번호 복사</button>
+        <div class="account-actions">
+          <button class="copy-btn" type="button" onclick="copyAccount('00000000000000')">계좌번호 복사</button>
+          <a class="pay-btn" href="여기에_신랑_카카오페이_송금링크" target="_blank">카카오페이</a>
+        </div>
       </div>
     </section>
 
     <!-- =====================================================
-      12. 엔딩
+      11. 엔딩
       수정 이미지: images/ending.jpg
     ====================================================== -->
     <section class="ending fade">
