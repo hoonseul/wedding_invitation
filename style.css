@@ -135,3 +135,45 @@ section { padding: 92px 24px; text-align: center; position: relative; }
   .timeline-copy p { font-size: 12px; }
   .map-buttons { grid-template-columns: 1fr; }
 }
+
+/* =====================================================
+   갤러리 전체화면 보기
+===================================================== */
+
+.gallery-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .92);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.gallery-modal.show {
+  display: flex;
+}
+
+.gallery-modal img {
+  width: 100%;
+  max-width: 430px;
+  max-height: 82vh;
+  object-fit: contain;
+  border-radius: 18px;
+}
+
+.gallery-close {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 50%;
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
