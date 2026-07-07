@@ -107,3 +107,33 @@ if (calendarBtn) {
     URL.revokeObjectURL(url);
   });
 }
+/* =====================================================
+   갤러리 사진 전체화면 보기
+===================================================== */
+
+function openGallery(src) {
+  const modal = document.getElementById("galleryModal");
+  const modalImg = document.getElementById("galleryModalImg");
+
+  modalImg.src = src;
+  modal.classList.add("show");
+
+  document.body.style.overflow = "hidden";
+}
+
+function closeGallery() {
+  const modal = document.getElementById("galleryModal");
+  const modalImg = document.getElementById("galleryModalImg");
+
+  modal.classList.remove("show");
+  modalImg.src = "";
+
+  document.body.style.overflow = "";
+}
+
+/* 배경 누르면 닫기 */
+document.getElementById("galleryModal").addEventListener("click", function(e) {
+  if (e.target.id === "galleryModal") {
+    closeGallery();
+  }
+});
