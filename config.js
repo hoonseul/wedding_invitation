@@ -79,7 +79,7 @@ const WEDDING = {
     {
       title: "신부측 계좌번호",
       people: [
-        { label: "신부", name: "박예슬", bank: "우리은행", number: "1002-527-268030", copyNumber: "00000000000000" },
+        { label: "신부", name: "박예슬", bank: "국민은행", number: "000000-00-000000", copyNumber: "00000000000000" },
         { label: "신부 아버님", name: "박○○", bank: "하나은행", number: "000000-00-000000", copyNumber: "00000000000000" },
         { label: "신부 어머님", name: "김○○", bank: "농협은행", number: "000000-00-000000", copyNumber: "00000000000000" }
       ]
