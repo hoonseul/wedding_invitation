@@ -37,6 +37,7 @@ function initCalendar(){
 
 function initTimeline(){
   const list = qs("timelineList");
+  if(!list) return;
   list.innerHTML = "";
   WEDDING.timeline.forEach(item=>{
     list.insertAdjacentHTML("beforeend", `
@@ -102,26 +103,74 @@ function initNaverMap(){
 }
 
 function initTransportation(){
-  qs("subwayList").innerHTML = WEDDING.transportation.subway.map(item=>`<p class="transport-row"><span class="route-dot" style="background:${item.color}"></span>${item.text}</p>`).join("");
-  qs("busList").innerHTML = WEDDING.transportation.bus.map(item=>`<p class="transport-row"><span class="route-dot" style="background:${item.color}"></span>${item.text}</p>`).join("");
-  qs("walkInfo").textContent = `· ${WEDDING.transportation.walk}`;
-  qs("parkingNote").textContent = WEDDING.transportation.parking;
+  const transport = WEDDING.transportation;
+
+  qs("subwayList").innerHTML = (transport.subway || []).map(item=>{
+    const station = item.station || item.text || "";
+    const exit = item.exit || item.walk || "";
+    return `
+      <div class="subway-item">
+        <strong>${station}</strong>
+        <span>${exit}</span>
+      </div>
+    `;
+  }).join("");
+
+  qs("walkInfo").textContent = "";
+
+  const busStops = transport.busStops
+    ? `<p class="bus-stop"><span>정류장</span>${transport.busStops}</p>`
+    : "";
+
+  const busGroups = (transport.busGroups || []).map(item=>`
+    <div class="bus-route-group">
+      <div class="bus-route-label" style="--route-color:${item.color}">
+        <span>${item.label}</span><strong>${item.name}</strong>
+      </div>
+      <p>${item.routes}</p>
+    </div>
+  `).join("");
+
+  const express = transport.express
+    ? `<p class="express-bus">${transport.express}</p>`
+    : "";
+
+  qs("busList").innerHTML = busStops + busGroups + express;
+  qs("parkingNote").textContent = transport.parking;
 }
 
 function initAfterParty(){
-  const data = WEDDING.afterParty;
+  // V7.1: 뒤풀이 안내는 별도 섹션이 아니라 Notice 안에 함께 표시합니다.
   const section = qs("afterPartySection");
-  if(!data.show){ section.style.display = "none"; return; }
-  qs("afterPartyTitle").textContent = data.title;
-  qs("afterPartyMessage").textContent = data.message;
-  qs("afterPartyTime").textContent = data.time;
-  qs("afterPartyPlace").textContent = data.place;
-  qs("afterPartyAddress").textContent = data.address;
-  qs("afterPartyMapBtn").href = `https://map.naver.com/p/search/${enc(data.mapSearch || data.place)}`;
+  if(section) section.style.display = "none";
 }
 
 function initNotice(){
-  qs("noticeList").innerHTML = WEDDING.notice.map(item=>`<div class="notice-item"><strong>${item.title}</strong><p>${item.text}</p></div>`).join("");
+  const items = [...(WEDDING.notice || [])];
+  const party = WEDDING.afterParty;
+
+  if(party && party.show){
+    const partyText = [
+      party.message,
+      `시간 : ${party.time}`,
+      `장소 : ${party.place}`,
+      `주소 : ${party.address}`
+    ].filter(Boolean).join("<br>");
+
+    items.push({
+      title: "뒤풀이 안내",
+      text: partyText,
+      mapSearch: party.mapSearch || party.place
+    });
+  }
+
+  qs("noticeList").innerHTML = items.map(item=>`
+    <div class="notice-item">
+      <strong>${item.title}</strong>
+      <p>${item.text}</p>
+      ${item.mapSearch ? `<a class="notice-map-button" href="https://map.naver.com/p/search/${enc(item.mapSearch)}" target="_blank" rel="noopener">뒤풀이 장소 지도 보기</a>` : ""}
+    </div>
+  `).join("");
 }
 
 function initAccounts(){
@@ -248,7 +297,7 @@ function initModalEvents(){
 }
 
 window.addEventListener("DOMContentLoaded",()=>{
-  initContent(); initCalendar(); initTimeline(); initGallery(); initMapLinks(); initTransportation(); initAfterParty(); initNotice(); initAccounts(); initPhotoUpload(); initShare(); initBgm(); initReveal(); initScrollProgress(); initModalEvents();
+  initContent(); initCalendar(); initGallery(); initMapLinks(); initTransportation(); initAfterParty(); initNotice(); initAccounts(); initPhotoUpload(); initShare(); initBgm(); initReveal(); initScrollProgress(); initModalEvents();
 });
 
 
