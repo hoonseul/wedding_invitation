@@ -651,13 +651,3 @@ body::before{
   border-color:var(--wine);
   color:#fff;
 }
-
-
-/* =====================================================
-   SAFETY PATCH: JS/config 로딩이 늦어져도 섹션이 빈 화면으로 보이지 않게 처리
-   - 기본값은 보임
-   - script.js가 정상 실행되면 motion-ready 클래스가 붙고 페이드인 적용
-===================================================== */
-.reveal{opacity:1;transform:none;}
-html.motion-ready .reveal{opacity:0;transform:translateY(34px);transition:1s ease;}
-html.motion-ready .reveal.show{opacity:1;transform:translateY(0);}

@@ -263,14 +263,8 @@ function initBgm(){
   };
 }
 function initReveal(){
-  document.documentElement.classList.add("motion-ready");
-  const revealEls = document.querySelectorAll(".reveal");
-  if(!("IntersectionObserver" in window)){
-    revealEls.forEach(el=>el.classList.add("show"));
-    return;
-  }
-  const observer = new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting) entry.target.classList.add("show");}),{threshold:.12, rootMargin:"0px 0px -8% 0px"});
-  revealEls.forEach(el=>observer.observe(el));
+  const observer = new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting) entry.target.classList.add("show");}),{threshold:.16});
+  document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
 }
 function initScrollProgress(){
   const bar = qs("scrollProgress");
